@@ -3,12 +3,12 @@
 <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <!--Register-->
-<div class="container py-5">
+<div class="text-left">
 	<h1>Register</h1>
 	<form method="POST">
 		{% csrf_token %}
 		{{ register_form|crispy }}
 		<button class="btn btn-primary" type="submit">Register</button>
 	</form>
-	<p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
+	<p class="text-left">If you already have an account, <a href="/login">login</a> instead.</p>
 </div>
