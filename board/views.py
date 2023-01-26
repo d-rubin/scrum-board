@@ -7,8 +7,11 @@ from django.contrib import messages
 
 def board(request):
     if request.method == 'GET':
-        user = authenticate(username=request.GET.get('username'))
-        return render(request, 'board.html')
+        user = authenticate(username=request.GET.get('username')) # problem
+        if(user.is_authenticated):
+            return render(request, 'board.html', {'name': user.first_name})
+        else:
+            return render(request, 'board.html', {'name': 'please login'})
 
 
 def register_request(request):
