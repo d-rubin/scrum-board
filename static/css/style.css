@@ -1,0 +1,11 @@
+.mdl-layout__tab {
+    width: 16%;
+    pointer-events: none;
+    padding: 0 !important;
+}
+
+.mdl-layout__tab-bar {
+    margin: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
