@@ -4,13 +4,13 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Scrum board</span>
+      <span class="mdl-layout-title">{{ request.user.username }}'s Scrum board</span>
+      <a class="link" href="{% url 'logout' %}">Logout</a>
     </div>
     <!-- Tabs -->
     <div class="mdl-layout__tab-bar">
       <div class="mdl-layout__tab">To do</div>
       <div class="mdl-layout__tab">In progress</div>
-      <div class="mdl-layout__tab">Done</div>
       <div class="mdl-layout__tab">Testing</div>
       <div class="mdl-layout__tab">Approved</div>
       <div class="mdl-layout__tab">Deployed</div>

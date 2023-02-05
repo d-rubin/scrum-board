@@ -1,5 +1,5 @@
 .mdl-layout__tab {
-    width: 16%;
+    width: 20%;
     pointer-events: none;
     padding: 0 !important;
 }
@@ -8,4 +8,24 @@
     margin: 0 !important;
     width: 100% !important;
     padding: 0 !important;
+}
+
+.modal-sheet .modal-dialog {
+  width: 380px;
+  transition: bottom .75s ease-in-out;
+}
+.modal-sheet .modal-footer {
+  padding-bottom: 2rem;
+}
+
+.modal-alert .modal-dialog {
+  width: 380px;
+}
+
+.modal-tour .modal-dialog {
+  width: 380px;
+}
+
+.modal {
+    height: 100vh !important;
 }
