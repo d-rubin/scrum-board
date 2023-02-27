@@ -2,26 +2,140 @@
 {% block content %}
 <!-- Simple header with scrollable tabs. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">{{ request.user.username }}'s Scrum board</span>
-      <a class="link" href="{% url 'logout' %}">Logout</a>
-    </div>
-    <!-- Tabs -->
-    <div class="mdl-layout__tab-bar">
-      <div class="mdl-layout__tab">To do</div>
-      <div class="mdl-layout__tab">In progress</div>
-      <div class="mdl-layout__tab">Testing</div>
-      <div class="mdl-layout__tab">Approved</div>
-      <div class="mdl-layout__tab">Deployed</div>
-    </div>
-  </header>
-  <main class="mdl-layout__content">
-    <div class="todoSection" id="todo"></div>
-    <div class="inProgressSection" id="inProgress"></div>
-    <div class="testingSection" id="testing"></div>
-    <div class="approvedSection" id="approved"></div>
-    <div class="deployedSection" id="deployed"></div>
-  </main>
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">{{ request.user.username }}'s Scrum board</span>
+            <a class="link" href="{% url 'logout' %}">Logout</a>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar">
+            <div class="mdl-layout__tab">To do</div>
+            <div class="mdl-layout__tab">In progress</div>
+            <div class="mdl-layout__tab">Testing</div>
+            <div class="mdl-layout__tab">Approved</div>
+            <div class="mdl-layout__tab">Deployed</div>
+        </div>
+    </header>
+
+    <div id="modal-container"></div>
+
+    <main class="mdl-layout__content">
+        <div class="todoSection" id="todo"></div>
+        <div class="inProgressSection" id="inProgress"></div>
+        <div class="testingSection" id="testing"></div>
+        <div class="approvedSection" id="approved"></div>
+        <div class="deployedSection" id="deployed"></div>
+    </main>
 </div>
+
+{% block javascript %}
+<script>
+    const url = "https://wrench3826.pythonanywhere.com/todos/";
+    const todo = document.getElementById("todo");
+    const inProgress = document.getElementById("inProgress");
+    const testing = document.getElementById("testing");
+    const approved = document.getElementById("approved");
+    const deployed = document.getElementById("deployed");
+    const modalContainer = document.getElementById("modal-container");
+
+    let tasks = [];
+
+    async function getTasks() {
+        let response = await fetch(url);
+        tasks = await response.json();
+        renderTasks()
+    }
+
+    function renderTasks() {
+        todo.innerHTML = "";
+        inProgress.innerHTML = "";
+        testing.innerHTML = "";
+        approved.innerHTML = "";
+        deployed.innerHTML = "";
+        for (let i = 0; i < tasks.length; i++) {
+            distributeTask(i);
+        }
+    }
+
+    function distributeTask(i) {
+        const danger = "danger";
+        const success = "success";
+        const warning = "warning";
+        const info = "info";
+        const primary = "primary";
+
+        switch (tasks[i].status) {
+            case 0:
+                todo.innerHTML += taskTemplate(i, danger);
+                break;
+            case 1:
+                inProgress.innerHTML += taskTemplate(i, warning);
+                break;
+            case 2:
+                testing.innerHTML += taskTemplate(i, info);
+                break;
+            case 3:
+                approved.innerHTML += taskTemplate(i, primary);
+                break;
+            case 4:
+                deployed.innerHTML += taskTemplate(i, success);
+                break;
+        }
+    }
+
+    function taskTemplate(i, color) {
+        return `<div class="panel panel-${color}">
+          <div class="panel-heading">
+            <h3 class="panel-title">${tasks[i].title}</h3>
+          </div>
+          <div class="panel-body">
+            <b>Description:</b><br> ${tasks[i].description}<br />
+            <b>Due:</b> ${tasks[i].due_date}<br>
+            <button type="button" class="btn btn-${color} mt-3"
+                onClick="openTask('${tasks[i].title}')">Open</button>
+          </div>
+        </div>`;
+    }
+
+    function openTask(title) {
+        const task = tasks.find(t => t.title === title);
+        modalContainer.innerHTML = showTask(task);
+        modalContainer.style = "display: flex;";
+    }
+
+    function closeTask() {
+        modalContainer.style = "display: none;"
+        modalContainer.innerHTML = "";
+    }
+
+    function showTask(task) {
+        return `<div class="modal-dialog h-50">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onClick="closeTask()" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Modal body text goes here.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick="closeTask()">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        `;
+    }
+
+    window.onload = function () {
+        getTasks();
+    };
+
+
+
+
+
+
+</script>
+{% endblock %}
 {% endblock %}
